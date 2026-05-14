@@ -4,29 +4,31 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
-import com.example.backend.entity.*;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Inventory {
+public class Actor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "inventory_id")
-    private Long inventoryId;
+    @Column(name = "actor_id")
+    private Long actorid;
 
-//    @Column(name = "film_id")
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "film_id")
-//    private Film filmId;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(name = "store_id")
-    private Long storeId;
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
+
+
+
 }
