@@ -1,7 +1,6 @@
-package com.example.backend.Repository;
+package com.example.backend.repository;
 
 import com.example.backend.entity.Actor;
-import com.example.backend.repository.ActorRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
