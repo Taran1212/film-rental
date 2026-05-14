@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
-
+    Long countByFilmFilmId(Integer filmId);
 }

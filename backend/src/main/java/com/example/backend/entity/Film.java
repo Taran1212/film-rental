@@ -26,7 +26,7 @@ public class Film {
     private String description;
 
     @Column(name = "release_year")
-    private String releaseYear;
+    private Integer releaseYear;
 
     @Column(name = "rental_duration")
     private Integer rentalDuration;

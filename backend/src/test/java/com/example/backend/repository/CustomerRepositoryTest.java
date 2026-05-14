@@ -157,11 +157,11 @@ class CustomerRepositoryTest {
     @DisplayName("Test findTopByOrderByCustomerIdDesc")
     void testFindTopByOrderByCustomerIdDesc() {
 
-        Customer customer =
+        var customer =
                 customerRepository.findTopByOrderByCustomerIdDesc();
 
-        assertThat(customer).isNotNull();
-        assertThat(customer.getCustomerId()).isEqualTo(3);
+        assertThat(customer).isPresent();
+        assertThat(customer.get().getCustomerId()).isEqualTo(3);
     }
 
     @Test
@@ -174,7 +174,7 @@ class CustomerRepositoryTest {
                 customerRepository.findByStoreId(99, pageable);
 
         assertThat(customers).isNotNull();
-        assertThat(customers.getTotalElements()).isEqualTo(0);
+        assertThat(customers.getTotalElements()).isZero();
     }
 
     @Test
@@ -183,6 +183,6 @@ class CustomerRepositoryTest {
 
         Long count = customerRepository.countByStoreId(99);
 
-        assertThat(count).isEqualTo(0);
+        assertThat(count).isZero();
     }
 }

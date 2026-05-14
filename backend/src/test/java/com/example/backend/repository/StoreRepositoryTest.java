@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class StoreRepositoryTest {
+class StoreRepositoryTest {
 
     @Autowired
     private StoreRepository storeRepo;
@@ -19,24 +19,24 @@ public class StoreRepositoryTest {
     @Test
     void testFindTopByOrderByStoreIdDesc() {
 
-        Store latestStore = storeRepo.findTopByOrderByStoreIdDesc();
+        var latestStore = storeRepo.findTopByOrderByStoreIdDesc();
 
-        assertNotNull(latestStore);
+        assertTrue(latestStore.isPresent());
 
-        System.out.println("Latest Store ID: " + latestStore.getStoreId());
-        System.out.println("Manager Staff ID: " + latestStore.getManagerStaffId());
-        System.out.println("Address ID: " + latestStore.getAddressId());
-        System.out.println("Last Update: " + latestStore.getLastUpdate());
+        System.out.println("Latest Store ID: " + latestStore.get().getStoreId());
+        System.out.println("Manager Staff ID: " + latestStore.get().getManagerStaffId());
+        System.out.println("Address ID: " + latestStore.get().getAddressId());
+        System.out.println("Last Update: " + latestStore.get().getLastUpdate());
 
-        assertNotNull(latestStore.getStoreId());
+        assertNotNull(latestStore.get().getStoreId());
     }
 
     @Test
     void testFindTopByOrderByStoreIdDescReturnsHighestId() {
 
-        Store latestStore = storeRepo.findTopByOrderByStoreIdDesc();
+        var latestStore = storeRepo.findTopByOrderByStoreIdDesc();
 
-        assertNotNull(latestStore);
+        assertTrue(latestStore.isPresent());
 
         Integer highestId = storeRepo.findAll()
                 .stream()
@@ -44,7 +44,7 @@ public class StoreRepositoryTest {
                 .max(Integer::compareTo)
                 .orElse(null);
 
-        assertEquals(highestId, latestStore.getStoreId());
+        assertEquals(highestId, latestStore.get().getStoreId());
     }
 
     @Test
