@@ -1,55 +1,42 @@
 package com.example.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "customer")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
-    private Long customerId;
+    private Integer customerId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "store_id", nullable = false)
-//    private Store store;
+    @Column(name = "store_id")
+    private Integer storeId;
 
-    @Column(name = "first_name", nullable = false, length = 45)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false, length = 45)
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email", length = 50)
+    @Column(name = "email")
     private String email;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "address_id", nullable = false)
-//    private Address address;
+    @Column(name = "address_id")
+    private Integer addressId;
 
     @Column(name = "active")
-    private Integer active;
+    private Boolean active;
 
     @Column(name = "create_date")
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
-
-//    @OneToMany(mappedBy = "customer")
-//    private List<Rental> rentals;
-//
-//    @OneToMany(mappedBy = "customer")
-//    private List<Payment> payments;
 }

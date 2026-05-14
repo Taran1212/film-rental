@@ -17,14 +17,14 @@ public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inventory_id")
-    private Long inventoryId;
+    private Integer inventoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "film_id")
     private Film film;
 
     @Column(name = "store_id")
-    private Long storeId;
+    private Integer storeId;
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
