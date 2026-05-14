@@ -1,4 +1,4 @@
-package com.example.backend.Entity;
+package com.example.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class Payment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "payment_id")
     private Integer paymentId;
 

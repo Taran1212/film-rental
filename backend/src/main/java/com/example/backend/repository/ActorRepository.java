@@ -1,11 +1,15 @@
 package com.example.backend.repository;
 
 import com.example.backend.entity.Actor;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ActorRepository extends JpaRepository<Actor,Integer> {
+    @NullMarked
     Page<Actor> findAll(Pageable pageable);
 
     Page<Actor> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
