@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ActorRepository extends JpaRepository<Actor,Integer> {
-    @NonNull Page<Actor> findAll(Pageable pageable);
+    @NonNull Page<Actor> findAll(@NonNull Pageable pageable);
 
     Page<Actor> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
             String firstName,
