@@ -17,7 +17,7 @@ public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inventory_id")
-    private Long inventoryId;
+    private Integer inventoryId;
 
 //    @Column(name = "film_id")
 //    @ManyToOne(fetch = FetchType.LAZY)
@@ -25,7 +25,7 @@ public class Inventory {
 //    private Film filmId;
 
     @Column(name = "store_id")
-    private Long storeId;
+    private Integer storeId;
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;

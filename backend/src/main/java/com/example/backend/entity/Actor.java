@@ -18,7 +18,7 @@ public class Actor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "actor_id")
-    private Long actorid;
+    private Integer actorId;
 
     @Column(name = "first_name")
     private String firstName;
@@ -28,7 +28,5 @@ public class Actor {
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
-
-
 
 }
