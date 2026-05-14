@@ -1,6 +1,6 @@
-package com.movie_rental_backend.repository;
+package com.example.backend.repository;
 
-import com.movie_rental_backend.entity.Film;
+import com.example.backend.entity.Film;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
