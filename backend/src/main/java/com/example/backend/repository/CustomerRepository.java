@@ -8,33 +8,33 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public interface CustomerRepository extends JpaRepository<Customer, Integer> {
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     // Total customers in store
-    Long countByStore_StoreId(Integer storeId);
+    Long countByStoreStoreId(Long storeId);
 
     // All customers in store
-    Page<Customer> findByStore_StoreId(Integer storeId, Pageable pageable);
+    Page<Customer> findByStoreStoreId(Long storeId, Pageable pageable);
 
     // Active customers count
-    Long countByStore_StoreIdAndActive(Integer storeId, Integer active);
+    Long countByStoreStoreIdAndActive(Long storeId, Long active);
 
     // Active customers list
-    Page<Customer> findByStore_StoreIdAndActive(
-            Integer storeId,
-            Integer active,
+    Page<Customer> findByStoreStoreIdAndActive(
+            Long storeId,
+            Long active,
             Pageable pageable
     );
 
     // New customers count this month
-    Long countByStore_StoreIdAndCreateDateBetween(
-            Integer storeId,
+    Long countByStoreStoreIdAndCreateDateBetween(
+            Long storeId,
             LocalDate startDate,
             LocalDate endDate
     );
 
     // New customers list this month
-    Page<Customer> findByStore_StoreIdAndCreateDateBetween(
+    Page<Customer> findByStoreStoreIdAndCreateDateBetween(
             Integer storeId,
             LocalDate startDate,
             LocalDate endDate,
@@ -42,32 +42,32 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     );
 
     // Search by first name
-    Page<Customer> findByFirstNameContainingIgnoreCaseAndStore_StoreId(
+    Page<Customer> findByFirstNameContainingIgnoreCaseAndStoreStoreId(
             String firstName,
-            Integer storeId,
+            Long storeId,
             Pageable pageable
     );
 
     // Search by last name
-    Page<Customer> findByLastNameContainingIgnoreCaseAndStore_StoreId(
+    Page<Customer> findByLastNameContainingIgnoreCaseAndStoreStoreId(
             String lastName,
-            Integer storeId,
+            Long storeId,
             Pageable pageable
     );
 
     // Search by email
-    Optional<Customer> findByEmailAndStore_StoreId(
+    Optional<Customer> findByEmailAndStoreStoreId(
             String email,
-            Integer storeId
+            Long storeId
     );
 
     // Filter by active/inactive
-    Page<Customer> findByActiveAndStore_StoreId(
-            Integer active,
-            Integer storeId,
+    Page<Customer> findByActiveAndStoreStoreId(
+            Long active,
+            Long storeId,
             Pageable pageable
     );
 
     // Customer details
-    Optional<Customer> findByCustomerId(Integer customerId);
+    Optional<Customer> findByCustomerId(Long customerId);
 }

@@ -17,12 +17,13 @@ import java.util.List;
 public class Customer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
-    private Integer customerId;
+    private Long customerId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id", nullable = false)
-    private Store store;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "store_id", nullable = false)
+//    private Store store;
 
     @Column(name = "first_name", nullable = false, length = 45)
     private String firstName;
@@ -33,9 +34,9 @@ public class Customer {
     @Column(name = "email", length = 50)
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "address_id", nullable = false)
+//    private Address address;
 
     @Column(name = "active")
     private Integer active;
@@ -46,9 +47,9 @@ public class Customer {
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Rental> rentals;
-
-    @OneToMany(mappedBy = "customer")
-    private List<Payment> payments;
+//    @OneToMany(mappedBy = "customer")
+//    private List<Rental> rentals;
+//
+//    @OneToMany(mappedBy = "customer")
+//    private List<Payment> payments;
 }
