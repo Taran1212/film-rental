@@ -26,7 +26,11 @@ public class Actor {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "last_update")
+    @Column(name = "last_update", nullable = true)
     private LocalDateTime lastUpdate;
 
+    @PrePersist
+    public void prePersist() {
+        this.lastUpdate = LocalDateTime.now();
+    }
 }
