@@ -32,6 +32,7 @@ public class CityRepositoryTest {
             System.out.println("City: " + city.getCity());
             System.out.println("------------------------");
         });
+
     }
 
     @Test

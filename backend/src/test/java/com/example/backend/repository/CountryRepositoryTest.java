@@ -31,6 +31,7 @@ public class CountryRepositoryTest {
             System.out.println("Country: " + country.getCountry());
             System.out.println("------------------------");
         });
+
     }
 
     @Test

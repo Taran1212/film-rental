@@ -23,4 +23,5 @@ public interface RentalRepository extends JpaRepository<Rental,Integer> {
     List<Rental> findByInventory_StoreIdAndInventory_Film_FilmIdInAndReturnDateIsNull(
             Integer storeId, List<Integer> filmIds);
 
+
 }

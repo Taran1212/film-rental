@@ -23,6 +23,9 @@ public class Store {
     @JsonIgnore
     private Staff managerStaff;
 
+    @Column(name = "manager_staff_id")
+    private Integer managerStaffId;
+
     @Column(name = "address_id")
     private Integer addressId;
 

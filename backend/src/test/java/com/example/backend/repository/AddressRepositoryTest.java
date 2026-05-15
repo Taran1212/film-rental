@@ -33,6 +33,7 @@ public class AddressRepositoryTest {
             System.out.println("Address: " + address.getAddress());
             System.out.println("------------------------");
         });
+
     }
 
     @Test
