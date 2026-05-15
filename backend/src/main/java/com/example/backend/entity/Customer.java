@@ -13,10 +13,12 @@ import java.time.LocalDateTime;
 public class Customer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
     private Integer customerId;
 
-    @Column(name = "store_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id", nullable = false)
     private Integer storeId;
 
     @Column(name = "first_name")
@@ -28,7 +30,8 @@ public class Customer {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "address_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id", nullable = false)
     private Integer addressId;
 
     @Column(name = "active")
