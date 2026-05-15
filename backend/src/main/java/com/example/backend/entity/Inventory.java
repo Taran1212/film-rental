@@ -1,5 +1,6 @@
 package com.example.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,11 @@ public class Inventory {
 
     @Column(name = "store_id")
     private Integer storeId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id", insertable = false, updatable = false)
+    @JsonIgnore
+    private Store store;
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;

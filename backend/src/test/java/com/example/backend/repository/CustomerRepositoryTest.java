@@ -60,8 +60,8 @@ class CustomerRepositoryTest {
         customer1.setFirstName("John");
         customer1.setLastName("Doe");
         customer1.setEmail("john@example.com");
-        customer1.setStoreId(store1);
-        customer1.setAddressId(address1);
+        customer1.setStore(store1);
+        customer1.setAddress(address1);
         customer1.setActive(true);
         customer1.setCreateDate(LocalDateTime.now());
         customer1.setLastUpdate(LocalDateTime.now());
@@ -71,8 +71,8 @@ class CustomerRepositoryTest {
         customer2.setFirstName("Jane");
         customer2.setLastName("Smith");
         customer2.setEmail("jane@example.com");
-        customer2.setStoreId(store1);
-        customer2.setAddressId(address2);
+        customer2.setStore(store1);
+        customer2.setAddress(address2);
         customer2.setActive(true);
         customer2.setCreateDate(LocalDateTime.now());
         customer2.setLastUpdate(LocalDateTime.now());
@@ -82,8 +82,8 @@ class CustomerRepositoryTest {
         customer3.setFirstName("Johnny");
         customer3.setLastName("Walker");
         customer3.setEmail("johnny@example.com");
-        customer3.setStoreId(store2);
-        customer3.setAddressId(address3);
+        customer3.setStore(store2);
+        customer3.setAddress(address3);
         customer3.setActive(false);
         customer3.setCreateDate(LocalDateTime.now());
         customer3.setLastUpdate(LocalDateTime.now());
