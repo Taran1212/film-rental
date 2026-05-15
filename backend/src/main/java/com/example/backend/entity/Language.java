@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class Language {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "language_id")
     private Integer languageId;
 
