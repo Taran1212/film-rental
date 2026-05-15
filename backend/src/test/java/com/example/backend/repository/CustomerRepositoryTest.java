@@ -100,7 +100,7 @@ class CustomerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<Customer> customers =
-                customerRepository.findByStoreId(store1, pageable);
+                customerRepository.findByStore(store1, pageable);
 
         assertThat(customers).isNotNull();
         assertThat(customers.getTotalElements()).isEqualTo(2);
@@ -110,7 +110,7 @@ class CustomerRepositoryTest {
     @DisplayName("Test countByStoreId")
     void testCountByStoreId() {
 
-        Long count = customerRepository.countByStoreId(store1);
+        Long count = customerRepository.countByStore(store1);
 
         assertThat(count).isEqualTo(2);
     }
@@ -123,7 +123,7 @@ class CustomerRepositoryTest {
 
         Page<Customer> customers =
                 customerRepository
-                        .findByStoreIdAndFirstNameContainingIgnoreCaseOrStoreIdAndLastNameContainingIgnoreCase(
+                        .findByStoreAndFirstNameContainingIgnoreCaseOrStoreAndLastNameContainingIgnoreCase(
                                 store1, "john",
                                 store1, "",
                                 pageable
@@ -143,7 +143,7 @@ class CustomerRepositoryTest {
 
         Page<Customer> customers =
                 customerRepository
-                        .findByStoreIdAndFirstNameContainingIgnoreCaseOrStoreIdAndLastNameContainingIgnoreCase(
+                        .findByStoreAndFirstNameContainingIgnoreCaseOrStoreAndLastNameContainingIgnoreCase(
                                 store1, "",
                                 store1, "smith",
                                 pageable
@@ -163,7 +163,7 @@ class CustomerRepositoryTest {
 
         Page<Customer> customers =
                 customerRepository
-                        .findByStoreIdAndFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
+                        .findByStoreAndFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
                                 store1,
                                 "Jane",
                                 "Smith",
@@ -199,7 +199,7 @@ class CustomerRepositoryTest {
         store99.setStoreId(99);
 
         Page<Customer> customers =
-                customerRepository.findByStoreId(store99, pageable);
+                customerRepository.findByStore(store99, pageable);
 
         assertThat(customers).isNotNull();
         assertThat(customers.getTotalElements()).isZero();
@@ -212,7 +212,7 @@ class CustomerRepositoryTest {
         Store store99 = new Store();
         store99.setStoreId(99);
 
-        Long count = customerRepository.countByStoreId(store99);
+        Long count = customerRepository.countByStore(store99);
 
         assertThat(count).isZero();
     }
