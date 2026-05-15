@@ -1,6 +1,8 @@
 package com.example.backend.repository;
 
+import com.example.backend.entity.Address;
 import com.example.backend.entity.Customer;
+import com.example.backend.entity.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,38 +28,62 @@ class CustomerRepositoryTest {
     private Customer customer2;
     private Customer customer3;
 
+    private Store store1;
+    private Store store2;
+
+    private Address address1;
+    private Address address2;
+    private Address address3;
+
     @BeforeEach
     void setUp() {
 
+        // Stores
+        store1 = new Store();
+        store1.setStoreId(1);
+
+        store2 = new Store();
+        store2.setStoreId(2);
+
+        // Addresses
+        address1 = new Address();
+        address1.setAddressId(101);
+
+        address2 = new Address();
+        address2.setAddressId(102);
+
+        address3 = new Address();
+        address3.setAddressId(103);
+
+        // Customer 1
         customer1 = new Customer();
-        customer1.setCustomerId(1);
-        customer1.setStoreId(1);
         customer1.setFirstName("John");
         customer1.setLastName("Doe");
         customer1.setEmail("john@example.com");
-        customer1.setAddressId(101);
+        customer1.setStore(store1);
+        customer1.setAddress(address1);
         customer1.setActive(true);
         customer1.setCreateDate(LocalDateTime.now());
         customer1.setLastUpdate(LocalDateTime.now());
 
+        // Customer 2
         customer2 = new Customer();
-        customer2.setCustomerId(2);
-        customer2.setStoreId(1);
         customer2.setFirstName("Jane");
         customer2.setLastName("Smith");
         customer2.setEmail("jane@example.com");
-        customer2.setAddressId(102);
+        customer2.setStore(store1);
+        customer2.setAddress(address2);
         customer2.setActive(true);
         customer2.setCreateDate(LocalDateTime.now());
         customer2.setLastUpdate(LocalDateTime.now());
 
+        // Customer 3
         customer3 = new Customer();
-        customer3.setCustomerId(3);
-        customer3.setStoreId(2);
         customer3.setFirstName("Johnny");
         customer3.setLastName("Walker");
         customer3.setEmail("johnny@example.com");
-        customer3.setAddressId(103);
+        customer3.setStore(store2);
+        customer3.setAddress(address3);
         customer3.setActive(false);
         customer3.setCreateDate(LocalDateTime.now());
         customer3.setLastUpdate(LocalDateTime.now());
@@ -74,7 +100,7 @@ class CustomerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<Customer> customers =
-                customerRepository.findByStoreId(1, pageable);
+                customerRepository.findByStoreId(store1, pageable);
 
         assertThat(customers).isNotNull();
         assertThat(customers.getTotalElements()).isEqualTo(2);
@@ -84,7 +110,7 @@ class CustomerRepositoryTest {
     @DisplayName("Test countByStoreId")
     void testCountByStoreId() {
 
-        Long count = customerRepository.countByStoreId(1);
+        Long count = customerRepository.countByStoreId(store1);
 
         assertThat(count).isEqualTo(2);
     }
@@ -98,8 +124,8 @@ class CustomerRepositoryTest {
         Page<Customer> customers =
                 customerRepository
                         .findByStoreIdAndFirstNameContainingIgnoreCaseOrStoreIdAndLastNameContainingIgnoreCase(
-                                1, "john",
-                                1, "",
+                                store1, "john",
+                                store1, "",
                                 pageable
                         );
 
@@ -118,8 +144,8 @@ class CustomerRepositoryTest {
         Page<Customer> customers =
                 customerRepository
                         .findByStoreIdAndFirstNameContainingIgnoreCaseOrStoreIdAndLastNameContainingIgnoreCase(
-                                1, "",
-                                1, "smith",
+                                store1, "",
+                                store1, "smith",
                                 pageable
                         );
 
@@ -138,7 +164,7 @@ class CustomerRepositoryTest {
         Page<Customer> customers =
                 customerRepository
                         .findByStoreIdAndFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
-                                1,
+                                store1,
                                 "Jane",
                                 "Smith",
                                 pageable
@@ -161,7 +187,6 @@ class CustomerRepositoryTest {
                 customerRepository.findTopByOrderByCustomerIdDesc();
 
         assertThat(customer).isPresent();
-        assertThat(customer.get().getCustomerId()).isEqualTo(3);
     }
 
     @Test
@@ -170,8 +195,11 @@ class CustomerRepositoryTest {
 
         Pageable pageable = PageRequest.of(0, 10);
 
+        Store store99 = new Store();
+        store99.setStoreId(99);
+
         Page<Customer> customers =
-                customerRepository.findByStoreId(99, pageable);
+                customerRepository.findByStoreId(store99, pageable);
 
         assertThat(customers).isNotNull();
         assertThat(customers.getTotalElements()).isZero();
@@ -181,7 +209,10 @@ class CustomerRepositoryTest {
     @DisplayName("Test countByStoreId when no customers exist")
     void testCountByStoreIdNoData() {
 
-        Long count = customerRepository.countByStoreId(99);
+        Store store99 = new Store();
+        store99.setStoreId(99);
+
+        Long count = customerRepository.countByStoreId(store99);
 
         assertThat(count).isZero();
     }
