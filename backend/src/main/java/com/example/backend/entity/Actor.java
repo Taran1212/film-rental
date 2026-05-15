@@ -1,6 +1,5 @@
 package com.example.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -30,9 +28,5 @@ public class Actor {
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
-
-    @OneToMany(mappedBy = "actor", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<FilmActor> filmActors;
 
 }

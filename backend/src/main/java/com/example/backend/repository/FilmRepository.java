@@ -30,4 +30,9 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
             String categoryName,
             Pageable pageable
     );
+
+    Page<Film> findDistinctByInventories_StoreId(Integer storeId, Pageable pageable);
+
+    Page<Film> findDistinctByInventories_StoreIdAndTitleContainingIgnoreCase(
+            Integer storeId, String title, Pageable pageable);
 }
