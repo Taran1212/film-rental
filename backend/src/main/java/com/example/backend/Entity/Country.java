@@ -15,24 +15,20 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Actor {
+public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "actor_id")
-    private Integer actorId;
+    @Column(name = "country_id")
+    private Integer countryId;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(name = "country")
+    private String country;
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
-    @OneToMany(mappedBy = "actor", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "country",fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<FilmActor> filmActors;
-
+    private List<City> cities;
 }

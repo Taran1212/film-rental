@@ -1,5 +1,6 @@
 package com.example.backend.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,24 +16,25 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Actor {
+public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "actor_id")
-    private Integer actorId;
+    @Column(name = "city_id")
+    private Integer cityId;
 
-    @Column(name = "first_name")
-    private String firstName;
 
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(name = "city")
+    private String city;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id")
+    private Country country;
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
-    @OneToMany(mappedBy = "actor", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "city",fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<FilmActor> filmActors;
-
+    private List<Address> addresses;
 }
