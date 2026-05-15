@@ -32,7 +32,7 @@ public class Customer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", nullable = false)
-    private Address addressId;
+    private Address address;
 
     @Column(name = "active")
     private Boolean active;
