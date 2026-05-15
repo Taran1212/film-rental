@@ -32,6 +32,7 @@ public class Address {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_id")
+    @JsonIgnore
     private City city;
 
     @Column(name = "postal_code")

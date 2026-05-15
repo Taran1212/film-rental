@@ -29,6 +29,7 @@ public class City {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
+    @JsonIgnore
     private Country country;
 
     @Column(name = "last_update")
