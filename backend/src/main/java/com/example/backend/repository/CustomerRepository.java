@@ -5,26 +5,22 @@ import com.example.backend.entity.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface CustomerRepository
         extends JpaRepository<Customer, Integer> {
 
-    // Search by first name OR last name, scoped to a store
-    Page<Customer> findByStoreIdAndFirstNameContainingIgnoreCaseOrStoreIdAndLastNameContainingIgnoreCase(
-            Store storeId1,
+    Page<Customer> findByStoreAndFirstNameContainingIgnoreCaseOrStoreAndLastNameContainingIgnoreCase(
+            Store store1,
             String firstName,
-            Store storeId2,
+            Store store2,
             String lastName,
             Pageable pageable
     );
 
-    // Full name search: firstName matches first part AND lastName matches second part, scoped to store
-    Page<Customer> findByStoreIdAndFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
-            Store storeId,
+    Page<Customer> findByStoreAndFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
+            Store store,
             String firstName,
             String lastName,
             Pageable pageable
@@ -32,7 +28,7 @@ public interface CustomerRepository
 
     Optional<Customer> findTopByOrderByCustomerIdDesc();
 
-    Page<Customer> findByStoreId(Store storeId, Pageable pageable);
+    Page<Customer> findByStore(Store store, Pageable pageable);
 
-    Long countByStoreId(Store storeId);
+    Long countByStore(Store store);
 }
