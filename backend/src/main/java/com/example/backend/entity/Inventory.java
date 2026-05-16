@@ -23,7 +23,7 @@ public class Inventory {
     private Film film;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id", insertable = false, updatable = false)
+    @JoinColumn(name = "store_id")
     @JsonIgnore
     private Store store;
 
