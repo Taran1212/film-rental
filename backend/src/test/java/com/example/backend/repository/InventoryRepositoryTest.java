@@ -1,7 +1,11 @@
 package com.example.backend.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import com.example.backend.entity.Film;
 import com.example.backend.entity.Inventory;
+import com.example.backend.entity.Store;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +20,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
 class InventoryRepositoryTest {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private InventoryRepository inventoryRepository;
@@ -74,14 +82,16 @@ class InventoryRepositoryTest {
     @Test
     @DisplayName("Should save new inventory item")
     void shouldSaveNewInventory() {
-        // Get an existing film
+
         Optional<Film> film = filmRepository.findById(1);
         assertThat(film).isPresent();
 
-        // Create a new inventory
+
+        Store store1 = entityManager.getReference(Store.class, 1);
+
         Inventory inventory = new Inventory();
         inventory.setFilm(film.get());
-        inventory.setStoreId(1);
+        inventory.setStore(store1);
         inventory.setLastUpdate(LocalDateTime.now());
 
         Inventory savedInventory = inventoryRepository.save(inventory);
@@ -89,7 +99,7 @@ class InventoryRepositoryTest {
         assertThat(savedInventory).isNotNull();
         assertThat(savedInventory.getInventoryId()).isNotNull();
         assertThat(savedInventory.getFilm().getFilmId()).isEqualTo(1);
-        assertThat(savedInventory.getStoreId()).isEqualTo(1);
+        assertThat(savedInventory.getStore().getStoreId()).isEqualTo(1);
 
     }
 }

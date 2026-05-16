@@ -18,9 +18,9 @@ public interface RentalRepository extends JpaRepository<Rental,Integer> {
 
     Long countByInventory_Film_FilmIdAndReturnDateIsNull(Integer filmId);
 
-    Long countByInventory_Film_FilmIdAndInventory_StoreIdAndReturnDateIsNull(Integer filmId, Integer storeId);
+    Long countByInventory_Film_FilmIdAndInventory_Store_StoreIdAndReturnDateIsNull(Integer filmId, Integer storeId);
 
-    List<Rental> findByInventory_StoreIdAndInventory_Film_FilmIdInAndReturnDateIsNull(
+    List<Rental> findByInventory_Store_StoreIdAndInventory_Film_FilmIdInAndReturnDateIsNull(
             Integer storeId, List<Integer> filmIds);
 
 

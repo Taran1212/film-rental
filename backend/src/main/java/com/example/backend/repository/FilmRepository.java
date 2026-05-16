@@ -11,28 +11,28 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 
     Page<Film> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
-    // Search films by actor first name OR last name (single keyword)
+
     Page<Film> findDistinctByFilmActors_Actor_FirstNameContainingIgnoreCaseOrFilmActors_Actor_LastNameContainingIgnoreCase(
             String firstName,
             String lastName,
             Pageable pageable
     );
 
-    // Search films by actor first name AND last name (full name search)
+
     Page<Film> findDistinctByFilmActors_Actor_FirstNameContainingIgnoreCaseAndFilmActors_Actor_LastNameContainingIgnoreCase(
             String firstName,
             String lastName,
             Pageable pageable
     );
 
-    // Search films by exact category name (case-insensitive)
+
     Page<Film> findDistinctByFilmCategories_Category_NameIgnoreCase(
             String categoryName,
             Pageable pageable
     );
 
-    Page<Film> findDistinctByInventories_StoreId(Integer storeId, Pageable pageable);
+    Page<Film> findDistinctByInventories_Store_StoreId(Integer storeId, Pageable pageable);
 
-    Page<Film> findDistinctByInventories_StoreIdAndTitleContainingIgnoreCase(
+    Page<Film> findDistinctByInventories_Store_StoreIdAndTitleContainingIgnoreCase(
             Integer storeId, String title, Pageable pageable);
 }

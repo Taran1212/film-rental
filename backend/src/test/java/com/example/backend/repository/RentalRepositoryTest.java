@@ -2,6 +2,7 @@ package com.example.backend.repository;
 
 import com.example.backend.entity.Inventory;
 import com.example.backend.entity.Rental;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
 public class RentalRepositoryTest {
 
     @Autowired
@@ -75,7 +77,7 @@ public class RentalRepositoryTest {
     @Test
     void testCountByInventoryFilmFilmIdAndInventoryStoreIdAndReturnDateIsNull() {
         Long count =
-                rentalRepo.countByInventory_Film_FilmIdAndInventory_StoreIdAndReturnDateIsNull(
+                rentalRepo.countByInventory_Film_FilmIdAndInventory_Store_StoreIdAndReturnDateIsNull(
                         1,
                         1
                 );
@@ -91,7 +93,7 @@ public class RentalRepositoryTest {
         List<Integer> filmIds = List.of(1, 2, 3, 4, 5);
 
         List<Rental> rentals =
-                rentalRepo.findByInventory_StoreIdAndInventory_Film_FilmIdInAndReturnDateIsNull(
+                rentalRepo.findByInventory_Store_StoreIdAndInventory_Film_FilmIdInAndReturnDateIsNull(
                         1,
                         filmIds
                 );
@@ -100,7 +102,7 @@ public class RentalRepositoryTest {
 
         rentals.forEach(rental -> {
             assertNull(rental.getReturnDate());
-            assertEquals(1, rental.getInventory().getStoreId());
+            assertEquals(1, rental.getInventory().getStore().getStoreId());
             assertTrue(filmIds.contains(rental.getInventory().getFilm().getFilmId()));
 
             System.out.println("Rental ID: " + rental.getRentalId());
