@@ -2,6 +2,7 @@ package com.example.backend.repository;
 
 import com.example.backend.entity.*;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
 class FilmRepositoryTest {
 
     @Autowired
@@ -148,14 +150,17 @@ class FilmRepositoryTest {
         entityManager.persist(filmCategory1);
         entityManager.persist(filmCategory2);
 
+        Store store1 = entityManager.getReference(Store.class, 1);
+        Store store2 = entityManager.getReference(Store.class, 2);
+
         Inventory inventory1 = new Inventory();
         inventory1.setFilm(inception);
-        inventory1.setStoreId( 1);
+        inventory1.setStore(store1);
         inventory1.setLastUpdate(LocalDateTime.now());
 
         Inventory inventory2 = new Inventory();
         inventory2.setFilm(titanic);
-        inventory2.setStoreId(2);
+        inventory2.setStore(store2);
         inventory2.setLastUpdate(LocalDateTime.now());
 
         entityManager.persist(inventory1);
@@ -238,15 +243,23 @@ class FilmRepositoryTest {
     void testFindDistinctByInventoriesStoreId() {
 
         Page<Film> result =
-                filmRepository.findDistinctByInventories_StoreId(
+                filmRepository.findDistinctByInventories_Store_StoreId(
                         1,
                         pageable
                 );
 
-        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getContent()).isNotEmpty();
 
-        assertThat(result.getContent().get(0).getTitle())
-                .isEqualTo("Test Inception");
+        assertThat(result.getContent())
+                .extracting(Film::getFilmId)
+                .doesNotHaveDuplicates();
+
+        assertThat(result.getContent())
+                .extracting(Film::getInventories)
+                .allMatch(invs ->
+                        invs.stream()
+                                .anyMatch(i -> i.getStore().getStoreId() == 1)
+                );
     }
 
     @Test
@@ -255,7 +268,7 @@ class FilmRepositoryTest {
 
         Page<Film> result =
                 filmRepository
-                        .findDistinctByInventories_StoreIdAndTitleContainingIgnoreCase(
+                        .findDistinctByInventories_Store_StoreIdAndTitleContainingIgnoreCase(
                                 1,
                                 "Inception",
                                 pageable

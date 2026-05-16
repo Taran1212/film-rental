@@ -6,6 +6,7 @@ import com.example.backend.entity.FilmCategory;
 import com.example.backend.entity.FilmCategoryId;
 import com.example.backend.entity.Language;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,14 +16,13 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
 class FilmCategoryRepositoryTest {
 
     @Autowired
@@ -41,7 +41,6 @@ class FilmCategoryRepositoryTest {
         Language language = new Language();
         language.setName("T");
         language.setLastUpdate(LocalDateTime.now());
-
         entityManager.persist(language);
 
         Category actionCategory = new Category();
@@ -83,27 +82,16 @@ class FilmCategoryRepositoryTest {
 
         entityManager.persist(film1);
         entityManager.persist(film2);
-
         entityManager.flush();
 
         FilmCategory filmCategory1 = new FilmCategory();
-
-        FilmCategoryId id1 = new FilmCategoryId();
-        id1.setFilmId(film1.getFilmId());
-        id1.setCategoryId(actionCategory.getCategoryId());
-
-        filmCategory1.setId(id1);
+        filmCategory1.setId(new FilmCategoryId());
         filmCategory1.setFilm(film1);
         filmCategory1.setCategory(actionCategory);
         filmCategory1.setLastUpdate(LocalDateTime.now());
 
         FilmCategory filmCategory2 = new FilmCategory();
-
-        FilmCategoryId id2 = new FilmCategoryId();
-        id2.setFilmId(film2.getFilmId());
-        id2.setCategoryId(comedyCategory.getCategoryId());
-
-        filmCategory2.setId(id2);
+        filmCategory2.setId(new FilmCategoryId());
         filmCategory2.setFilm(film2);
         filmCategory2.setCategory(comedyCategory);
         filmCategory2.setLastUpdate(LocalDateTime.now());

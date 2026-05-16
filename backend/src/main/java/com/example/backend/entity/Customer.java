@@ -17,11 +17,9 @@ public class Customer {
     @Column(name = "customer_id")
     private Integer customerId;
 
-    @Column(name = "store_id")
-    private Integer storeId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id",  insertable = false, updatable = false)
+    @JoinColumn(name = "store_id")
     private Store store;
 
     @Column(name = "first_name")
@@ -33,11 +31,8 @@ public class Customer {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "address_id")
-    private Integer addressId;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id",  insertable = false, updatable = false)
+    @JoinColumn(name = "address_id")
     private Address address;
 
     @Column(name = "active")
