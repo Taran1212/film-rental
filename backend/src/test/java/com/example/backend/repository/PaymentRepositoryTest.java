@@ -66,9 +66,7 @@ public class PaymentRepositoryTest {
         return saved;
     }
 
-    // -------------------------------------------------------
-    // findTopByOrderByPaymentIdDesc
-    // -------------------------------------------------------
+
 
     @Test
     @DisplayName("findTopByOrderByPaymentIdDesc - returns present when payments exist")
@@ -101,9 +99,6 @@ public class PaymentRepositoryTest {
         assertThat(result.get().getPaymentId()).isEqualTo(highest.getPaymentId());
     }
 
-    // -------------------------------------------------------
-    // findByStaff_StoreId
-    // -------------------------------------------------------
 
     @Test
     @DisplayName("findByStaff_StoreId - returns empty when storeId does not exist")
