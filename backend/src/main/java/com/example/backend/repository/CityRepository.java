@@ -12,5 +12,5 @@ public interface CityRepository extends JpaRepository<City,Integer> {
 
     Page<City> findAll(Pageable pageable);
 
-    List<CityProjection> findByCountryIdOrderByCityAsc(Integer countryId);
+//    List<CityProjection> findByCountryIdOrderByCityAsc(Integer countryId);
 }
