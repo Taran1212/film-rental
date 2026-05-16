@@ -93,7 +93,7 @@ class CustomerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<Customer> customers =
-                customerRepository.findByStore(store1, pageable);
+                customerRepository.findByStore_storeId(store1, pageable);
 
         assertThat(customers.getTotalElements()).isGreaterThan(0);
     }
@@ -102,7 +102,7 @@ class CustomerRepositoryTest {
     @DisplayName("Test countByStore")
     void testCountByStore() {
 
-        Long count = customerRepository.countByStore(store1);
+        Long count = customerRepository.countByStore_storeId(store1);
 
         assertThat(count).isGreaterThan(0);
     }
@@ -114,7 +114,7 @@ class CustomerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<Customer> customers =
-                customerRepository.findByStoreAndFirstNameContainingIgnoreCase(
+                customerRepository.findByStore_storeIdAndFirstNameContainingIgnoreCase(
                         store1,
                         "john",
                         pageable
@@ -134,7 +134,7 @@ class CustomerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<Customer> customers =
-                customerRepository.findByStoreAndLastNameContainingIgnoreCase(
+                customerRepository.findByStore_storeIdAndLastNameContainingIgnoreCase(
                         store1,
                         "smith",
                         pageable
@@ -164,7 +164,7 @@ class CustomerRepositoryTest {
         store99.setStoreId(99);
 
         Page<Customer> customers =
-                customerRepository.findByStore(store99, pageable);
+                customerRepository.findByStore_storeId(store99, pageable);
 
         assertThat(customers.getTotalElements()).isZero();
     }
@@ -176,7 +176,7 @@ class CustomerRepositoryTest {
         Store store99 = new Store();
         store99.setStoreId(99);
 
-        Long count = customerRepository.countByStore(store99);
+        Long count = customerRepository.countByStore_storeId(store99);
 
         assertThat(count).isZero();
     }
