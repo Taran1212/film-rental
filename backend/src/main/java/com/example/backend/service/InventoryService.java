@@ -2,9 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.dto.InventoryDto;
 import com.example.backend.entity.Film;
-import com.example.backend.entity.Inventory;
 import com.example.backend.entity.Staff;
-import com.example.backend.entity.Store;
 import com.example.backend.exception.ResourceNotFoundException;
 import com.example.backend.repository.*;
 import com.example.backend.util.AuthUtil;
@@ -12,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +34,7 @@ public class InventoryService {
         Film film = inventoryRepository.findById(filmId).orElseThrow(() -> new ResourceNotFoundException("film not found with id: " + filmId)).getFilm();
         Integer storeId = currentStoreId();
 
-        Long totalCopies = inventoryRepository.countByFilm_FilmIdAndStoreId(filmId, storeId);
+        Long totalCopies = inventoryRepository.countByFilm_FilmIdAndStore_StoreId(filmId, storeId);
         Long rentedCopies = rentalRepository.countByInventory_Film_FilmIdAndInventory_Store_StoreIdAndReturnDateIsNull(
                 filmId, storeId
         );

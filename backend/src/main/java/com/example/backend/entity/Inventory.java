@@ -22,9 +22,6 @@ public class Inventory {
     @JoinColumn(name = "film_id")
     private Film film;
 
-    @Column(name = "store_id")
-    private Integer storeId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     @JsonIgnore
