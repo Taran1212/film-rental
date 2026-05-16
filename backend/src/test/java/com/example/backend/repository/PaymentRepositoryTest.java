@@ -37,7 +37,7 @@ public class PaymentRepositoryTest {
     private static final Integer CUSTOMER_ID = 1;
     private static final Integer RENTAL_ID   = 1;
 
-    private static int paymentIdCounter = 99000;
+    //private static int paymentIdCounter = 99000;
 
     private Staff    staff1;
     private Staff    staff2;
@@ -54,7 +54,7 @@ public class PaymentRepositoryTest {
 
     private Payment createPayment(Staff staff, BigDecimal amount, LocalDateTime date) {
         Payment payment = new Payment();
-        payment.setPaymentId(paymentIdCounter++);
+        //payment.setPaymentId(paymentIdCounter++);
         payment.setStaff(staff);
         payment.setCustomer(customer);
         payment.setRental(rental);
