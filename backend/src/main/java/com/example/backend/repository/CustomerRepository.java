@@ -9,13 +9,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
-    Page<Customer> findByStoreAndFirstNameContainingIgnoreCase(
+    Page<Customer> findByStore_storeIdAndFirstNameContainingIgnoreCase(
         Store store,
         String firstName,
         Pageable pageable
 );
 
-    Page<Customer> findByStoreAndLastNameContainingIgnoreCase(
+    Page<Customer> findByStore_storeIdAndLastNameContainingIgnoreCase(
             Store store,
             String lastName,
             Pageable pageable
@@ -25,8 +25,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     Optional<Customer> findTopByOrderByCustomerIdDesc();
 
 
-    Page<Customer> findByStore(Store store, Pageable pageable);
+    Page<Customer> findByStore_storeId(Store store, Pageable pageable);
 
 
-    Long countByStore(Store store);
+    Long countByStore_storeId(Store store);
 }
