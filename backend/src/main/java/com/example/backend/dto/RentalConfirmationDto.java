@@ -1,5 +1,4 @@
-package com.movie_rental_backend.dto;
-
+package com.example.backend.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

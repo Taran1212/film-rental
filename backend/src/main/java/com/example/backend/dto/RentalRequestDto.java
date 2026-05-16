@@ -1,4 +1,4 @@
-package com.movie_rental_backend.dto;
+package com.example.backend.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
