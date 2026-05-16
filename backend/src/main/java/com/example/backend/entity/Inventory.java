@@ -2,21 +2,19 @@ package com.example.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "inventory")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "inventory")
 public class Inventory {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     @Column(name = "inventory_id")
     private Integer inventoryId;
 
@@ -24,8 +22,11 @@ public class Inventory {
     @JoinColumn(name = "film_id")
     private Film film;
 
+    @Column(name = "store_id")
+    private Integer storeId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "store_id", insertable = false, updatable = false)
     @JsonIgnore
     private Store store;
 
