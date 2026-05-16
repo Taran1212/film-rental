@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.dto.projection.ActorProjection;
 import com.example.backend.entity.Actor;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,10 +57,10 @@ class ActorRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should find actors by first name or last name with pageable")
+    @DisplayName("Should find actors by first name or last name with projection")
     void testFindByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseWithPageable() {
 
-        Page<Actor> result =
+        Page<ActorProjection> result =
                 actorRepository
                         .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
                                 "TestTom",
@@ -69,17 +70,16 @@ class ActorRepositoryTest {
 
         assertThat(result.getContent()).hasSize(1);
 
-        Actor actor = result.getContent().get(0);
+        ActorProjection actor = result.getContent().get(0);
 
-        assertThat(actor.getFirstName()).isEqualTo("TestTom");
-        assertThat(actor.getLastName()).isEqualTo("TestHanks");
+        assertThat(actor.getActorName()).isEqualTo("TestTom TestHanks");
     }
 
     @Test
     @DisplayName("Should find actors by first name and last name with pageable")
     void testFindByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCaseWithPageable() {
 
-        Page<Actor> result =
+        Page<ActorProjection> result =
                 actorRepository
                         .findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
                                 "TestTom",
@@ -89,47 +89,8 @@ class ActorRepositoryTest {
 
         assertThat(result.getContent()).hasSize(1);
 
-        Actor actor = result.getContent().get(0);
+        ActorProjection actor = result.getContent().get(0);
 
-        assertThat(actor.getFirstName()).isEqualTo("TestTom");
-        assertThat(actor.getLastName()).isEqualTo("TestHanks");
-    }
-
-    @Test
-    @DisplayName("Should find actors by first name and last name")
-    void testFindByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase() {
-
-        List<Actor> result =
-                actorRepository
-                        .findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
-                                "TestLeonardo",
-                                "TestDiCaprio"
-                        );
-
-        assertThat(result).hasSize(1);
-
-        Actor actor = result.get(0);
-
-        assertThat(actor.getFirstName()).isEqualTo("TestLeonardo");
-        assertThat(actor.getLastName()).isEqualTo("TestDiCaprio");
-    }
-
-    @Test
-    @DisplayName("Should find actors by first name or last name")
-    void testFindByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase() {
-
-        List<Actor> result =
-                actorRepository
-                        .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
-                                "TestTom",
-                                "TestTom"
-                        );
-
-        assertThat(result).hasSize(1);
-
-        Actor actor = result.get(0);
-
-        assertThat(actor.getFirstName()).isEqualTo("TestTom");
-        assertThat(actor.getLastName()).isEqualTo("TestHanks");
+        assertThat(actor.getActorName()).isEqualTo("TestTom TestHanks");
     }
 }
