@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.dto.InventoryDto;
 import com.example.backend.entity.Film;
+import com.example.backend.entity.Inventory;
 import com.example.backend.entity.Staff;
 import com.example.backend.exception.ResourceNotFoundException;
 import com.example.backend.repository.*;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -107,6 +109,25 @@ public class InventoryService {
         return new PageImpl<>(inventoryDtos, pageable, filmPage.getTotalElements());
     }
 
-    
+    public Integer findFirstAvailableInventoryId(Integer filmId) {
+        Integer storeId = currentStoreId();
+
+        List<Inventory> copies = inventoryRepository.findByStore_StoreIdAndFilm_FilmIdIn(storeId, List.of(filmId));
+
+        if (copies.isEmpty()) {
+            return null;
+        }
+
+        Set<Integer> rentedIds = rentalRepository.findByInventory_Store_StoreIdAndInventory_Film_FilmIdInAndReturnDateIsNull(
+                        storeId, List.of(filmId))
+                .stream()
+                .map(r -> r.getInventory().getInventoryId())
+                .collect(Collectors.toSet());
+        return copies.stream()
+                .map(Inventory::getInventoryId)
+                .filter(id -> !rentedIds.contains(id))
+                .findFirst()
+                .orElse(null);
+    }
 
 }
