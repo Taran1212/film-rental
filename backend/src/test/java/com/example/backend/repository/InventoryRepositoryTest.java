@@ -1,10 +1,8 @@
 package com.example.backend.repository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+
 import com.example.backend.entity.Film;
 import com.example.backend.entity.Inventory;
-import com.example.backend.entity.Store;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class InventoryRepositoryTest {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     @Autowired
     private InventoryRepository inventoryRepository;
 
@@ -33,73 +28,76 @@ class InventoryRepositoryTest {
     private FilmRepository filmRepository;
 
     @Test
-    @DisplayName("Should count inventory by film ID")
-    void shouldCountByFilmFilmId() {
-        // Get an existing film from the database
-        Optional<Film> film = filmRepository.findById(1);
-
-        assertThat(film).isPresent();
-
-        // Count inventory items for this film
-        Long count = inventoryRepository.countByFilmFilmId(film.get().getFilmId());
-
+    @DisplayName("countByFilm_FilmId — non-negative count for an existing film")
+    void shouldCountByFilmId() {
+        Long count = inventoryRepository.countByFilm_FilmId(1);
         assertThat(count).isNotNull().isGreaterThanOrEqualTo(0);
     }
 
     @Test
-    @DisplayName("Should return zero count for non-existent film ID")
-    void shouldReturnZeroCountForNonExistentFilm() {
-        Long count = inventoryRepository.countByFilmFilmId(999999);
-
-        assertThat(count).isZero();
+    @DisplayName("countByFilm_FilmId — unknown film returns zero")
+    void zeroCountForUnknownFilm() {
+        assertThat(inventoryRepository.countByFilm_FilmId(999_999)).isZero();
     }
 
     @Test
-    @DisplayName("Should find all inventory items")
-    void shouldFindAllInventory() {
-        List<Inventory> inventories = inventoryRepository.findAll();
-
-        assertThat(inventories).isNotNull().isNotEmpty();
+    @DisplayName("countByFilm_FilmIdAndStoreId — scoped count")
+    void shouldCountByFilmAndStore() {
+        Long count = inventoryRepository.countByFilm_FilmIdAndStoreId(1, 1);
+        assertThat(count).isNotNull().isGreaterThanOrEqualTo(0);
     }
 
     @Test
-    @DisplayName("Should find inventory by ID")
-    void shouldFindInventoryById() {
-        Optional<Inventory> inventory = inventoryRepository.findById(1);
-
-        assertThat(inventory).isPresent();
-        assertThat(inventory.get().getInventoryId()).isEqualTo(1);
+    @DisplayName("findByStoreId — list scoped to a store")
+    void shouldListByStore() {
+        List<Inventory> list = inventoryRepository.findByStore_StoreId(1);
+        assertThat(list).isNotEmpty().
+        allSatisfy(i -> assertThat(i.getStoreId()).isEqualTo(1));
     }
 
     @Test
-    @DisplayName("Should return empty optional for non-existent inventory ID")
-    void shouldReturnEmptyForNonExistentId() {
-        Optional<Inventory> inventory = inventoryRepository.findById(999999);
+    @DisplayName("findByStoreIdAndFilm_FilmIdIn — batch fetch by film ids at a store")
+    void shouldBatchFetchByFilmIds() {
+        List<Inventory> list = inventoryRepository
+                .findByStoreIdAndFilm_FilmIdIn(1, List.of(1, 2, 3));
 
-        assertThat(inventory).isEmpty();
+        assertThat(list).isNotNull();
+        assertThat(list).allSatisfy(i -> {
+            assertThat(i.getStoreId()).isEqualTo(1);
+            assertThat(i.getFilm()).isNotNull();
+            assertThat(i.getFilm().getFilmId()).isIn(1, 2, 3);
+        });
     }
 
     @Test
-    @DisplayName("Should save new inventory item")
+    @DisplayName("Inventory → Film + Store relations are navigable")
+    void shouldNavigateRelations() {
+        List<Inventory> list = inventoryRepository.findByStore_StoreId(1);
+        if (list.isEmpty()) return;
+
+        Inventory first = list.get(0);
+        assertThat(first.getFilm()).isNotNull();
+        assertThat(first.getFilm().getFilmId()).isPositive();
+        assertThat(first.getStore()).isNotNull();
+        assertThat(first.getStore().getStoreId()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("save — new inventory row gets a generated id (rolled back by @DataJpaTest)")
     void shouldSaveNewInventory() {
-
         Optional<Film> film = filmRepository.findById(1);
         assertThat(film).isPresent();
 
+        Inventory inv = new Inventory();
+        inv.setFilm(film.get());
+        inv.setStoreId(1);
+        inv.setLastUpdate(LocalDateTime.now());
 
-        Store store1 = entityManager.getReference(Store.class, 1);
-
-        Inventory inventory = new Inventory();
-        inventory.setFilm(film.get());
-        inventory.setStore(store1);
-        inventory.setLastUpdate(LocalDateTime.now());
-
-        Inventory savedInventory = inventoryRepository.save(inventory);
-
-        assertThat(savedInventory).isNotNull();
-        assertThat(savedInventory.getInventoryId()).isNotNull();
-        assertThat(savedInventory.getFilm().getFilmId()).isEqualTo(1);
-        assertThat(savedInventory.getStore().getStoreId()).isEqualTo(1);
-
+        Inventory saved = inventoryRepository.save(inv);
+        assertThat(saved).isNotNull();
+        assertThat(saved.getInventoryId()).isNotNull().isPositive();
+        assertThat(saved.getFilm().getFilmId()).isEqualTo(1);
+        assertThat(saved.getStoreId()).isEqualTo(1);
+        // tx rolls back at end — nothing persists
     }
 }
