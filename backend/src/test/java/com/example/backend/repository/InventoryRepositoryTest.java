@@ -50,7 +50,7 @@ class InventoryRepositoryTest {
     @Test
     @DisplayName("findByStoreId — list scoped to a store")
     void shouldListByStore() {
-        List<Inventory> list = inventoryRepository.findByStoreId(1);
+        List<Inventory> list = inventoryRepository.findByStore_StoreId(1);
         assertThat(list).isNotEmpty().
         allSatisfy(i -> assertThat(i.getStoreId()).isEqualTo(1));
     }
@@ -72,7 +72,7 @@ class InventoryRepositoryTest {
     @Test
     @DisplayName("Inventory → Film + Store relations are navigable")
     void shouldNavigateRelations() {
-        List<Inventory> list = inventoryRepository.findByStoreId(1);
+        List<Inventory> list = inventoryRepository.findByStore_StoreId(1);
         if (list.isEmpty()) return;
 
         Inventory first = list.get(0);
