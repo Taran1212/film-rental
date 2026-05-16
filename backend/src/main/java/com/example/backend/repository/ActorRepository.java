@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.dto.projection.ActorProjection;
 import com.example.backend.entity.Actor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
@@ -8,33 +9,32 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ActorRepository extends JpaRepository<Actor,Integer> {
     @NonNull Page<Actor> findAll(@NonNull Pageable pageable);
 
-    Page<Actor> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+    Page<ActorProjection> findAllProjectedBy(Pageable pageable);
+
+
+    Page<ActorProjection> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
             String firstName,
             String lastName,
             Pageable pageable
     );
 
 
-    Page<Actor> findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
+    Page<ActorProjection> findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
             String firstName,
             String lastName,
             Pageable pageable
     );
 
-    List<Actor> findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
-            String firstName,
-            String lastName
-    );
+    Optional<ActorProjection> findProjectedByActorId(Integer actorId);
 
-    List<Actor> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
-            String firstName,
-            String lastName
-    );
+    List<ActorProjection> findAllByOrderByFirstNameAscLastNameAsc();
 
+    Optional<Actor> findTopByOrderByActorIdDesc();
 
 }
