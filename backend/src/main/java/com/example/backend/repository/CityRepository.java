@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface CityRepository extends JpaRepository<City,Integer> {
 
-    List<CityProjection> findByCountryIdOrderByCityAsc(Integer countryId);
+    List<CityProjection> findByCountry_CountryIdOrderByCityAsc(Integer countryId);
 
     Optional<City> findTopByOrderByCityIdDesc();
 }
