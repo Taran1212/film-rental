@@ -55,23 +55,30 @@ class StaffControllerTest {
             public String getPhone() { return "+1 234"; }
         };
     }
-    // when testing this method set password
-    //eg-> r.setPassword("test1234")
-    private StaffRegisterDto validRequest() {
-        StaffRegisterDto r = new StaffRegisterDto();
-        r.setFirstName("Alice");
-        r.setLastName("Doe");
-        r.setUsername("alice_d");
-        r.setEmail("alice@example.com");
-        //set your passward
-        r.setPassword();
+    @SpringBootTest
+    @ActiveProfiles("test")
+    class StaffControllerTest {
 
-        r.setStoreId(1);
-        r.setAddress("123 Main St");
-        r.setDistrict("D1");
-        r.setCityId(1);
-        r.setPhone("+1 555");
-        return r;
+        @Value("${test.staff.password}")
+        private String testPassword;
+
+        @Value("${test.staff.username}")
+        private String testUsername;
+
+        private StaffRegisterDto validRequest() {
+            StaffRegisterDto r = new StaffRegisterDto();
+            r.setFirstName("Alice");
+            r.setLastName("Doe");
+            r.setUsername(testUsername);      // ✅ hardcoded nahi
+            r.setEmail("alice@example.com");
+            r.setPassword(testPassword);      // ✅ hardcoded nahi
+            r.setStoreId(1);
+            r.setAddress("123 Main St");
+            r.setDistrict("D1");
+            r.setCityId(1);
+            r.setPhone("+1 555");
+            return r;
+        }
     }
 
     @Test
