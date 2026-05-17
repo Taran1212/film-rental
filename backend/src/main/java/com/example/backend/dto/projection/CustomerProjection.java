@@ -11,6 +11,7 @@ public interface CustomerProjection {
 
     String getEmail();
 
+    @Value("#{target.store.storeId}")
     Integer getStoreId();
 
     Boolean getActive();

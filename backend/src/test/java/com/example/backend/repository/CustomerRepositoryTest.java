@@ -90,7 +90,7 @@ class CustomerRepositoryTest {
     @Test
     @DisplayName("countByStoreId — store 1 has many customers")
     void shouldCountCustomersInStore() {
-        Long count = customerRepository.countByStoreId(1);
+        Long count = customerRepository.countByStore_StoreId(1);
         assertThat(count).isNotNull().isPositive();
     }
 
