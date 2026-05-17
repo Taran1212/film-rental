@@ -1,4 +1,4 @@
-package com.example.backend.service;
+package com.example.backend.service.inventory;
 
 import com.example.backend.dto.InventoryDto;
 import com.example.backend.entity.Film;
