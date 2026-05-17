@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,5 +30,8 @@ public class Actor {
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
+
+    @OneToMany(mappedBy = "actor", fetch = FetchType.LAZY)
+    private List<FilmActor> filmActors = new ArrayList<>();
 
 }

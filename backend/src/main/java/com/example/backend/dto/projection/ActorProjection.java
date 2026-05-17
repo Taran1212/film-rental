@@ -9,5 +9,6 @@ public interface ActorProjection {
     @Value("#{target.firstName + ' ' + target.lastName}")
     String getActorName();
 
+    @Value("#{target.filmActors.size()}")
     Long getTotalMovies();
 }

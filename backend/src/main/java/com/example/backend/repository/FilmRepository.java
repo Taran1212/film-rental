@@ -18,25 +18,6 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
     @EntityGraph(attributePaths = "language")
     Page<FilmProjection> findAllProjectedBy(Pageable pageable);
 
-    Page<Film> findDistinctByFilmActors_Actor_FirstNameContainingIgnoreCaseOrFilmActors_Actor_LastNameContainingIgnoreCase(
-            String firstName,
-            String lastName,
-            Pageable pageable
-    );
-
-
-    Page<Film> findDistinctByFilmActors_Actor_FirstNameContainingIgnoreCaseAndFilmActors_Actor_LastNameContainingIgnoreCase(
-            String firstName,
-            String lastName,
-            Pageable pageable
-    );
-
-
-    Page<Film> findDistinctByFilmCategories_Category_NameIgnoreCase(
-            String categoryName,
-            Pageable pageable
-    );
-
     Page<Film> findDistinctByInventories_Store_StoreId(Integer storeId, Pageable pageable);
 
     Page<Film> findDistinctByInventories_Store_StoreIdAndTitleContainingIgnoreCase(
@@ -44,6 +25,21 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 
     @EntityGraph(attributePaths = "language")
     Page<FilmProjection> findDistinctByFilmActors_Actor_ActorId(Integer actorId, Pageable pageable);
+
+
+    @EntityGraph(attributePaths = "language")
+    Page<FilmProjection>
+    findDistinctByFilmActors_Actor_FirstNameContainingIgnoreCaseAndFilmActors_Actor_LastNameContainingIgnoreCase(
+            String firstName, String lastName, Pageable pageable);
+
+    @EntityGraph(attributePaths = "language")
+    Page<FilmProjection>
+    findDistinctByFilmActors_Actor_FirstNameContainingIgnoreCaseOrFilmActors_Actor_LastNameContainingIgnoreCase(
+            String firstName, String lastName, Pageable pageable);
+
+    @EntityGraph(attributePaths = "language")
+    Page<FilmProjection> findDistinctByFilmCategories_Category_NameIgnoreCase(
+            String categoryName, Pageable pageable);
 
 
 }
