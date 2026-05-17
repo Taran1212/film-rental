@@ -2,6 +2,7 @@ package com.example.backend.controller.film;
 
 
 import com.example.backend.dto.projection.ActorProjection;
+import com.example.backend.dto.projection.FilmProjection;
 import com.example.backend.service.film.ActorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,5 +41,13 @@ public class ActorController {
     @GetMapping("/{id}")
     public ActorProjection getActorById(@PathVariable Integer id) {
         return actorService.getActorById(id);
+    }
+
+    @GetMapping("/{id}/movies")
+    public Page<FilmProjection> getActorMovies(
+            @PathVariable Integer id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return actorService.getActorMovies(id, PageRequest.of(page, size));
     }
 }
