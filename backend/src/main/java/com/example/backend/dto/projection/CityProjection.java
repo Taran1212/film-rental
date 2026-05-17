@@ -8,5 +8,6 @@ public interface CityProjection {
     @Value("#{target.city}")
     String getName();
 
+    @Value("#{target.country.countryId}")
     Integer getCountryId();
 }
