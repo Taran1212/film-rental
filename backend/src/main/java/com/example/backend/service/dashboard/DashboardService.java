@@ -25,7 +25,7 @@ public class DashboardService {
     public DashboardStatsDto getDashboardStats() {
         Integer storeId = getStoreId();
 
-        Long totalCustomers = customerRepository.countByStoreId(storeId);
+        Long totalCustomers = customerRepository.countByStore_StoreId(storeId);
         Long totalMovies = filmRepository.count();
         Long activeRentals = rentalRepository.countByStaff_StoreIdAndReturnDateIsNull(storeId);
         Double totalRevenue = paymentRepository.findByStaff_StoreId(storeId).stream()
