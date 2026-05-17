@@ -30,7 +30,7 @@ class CustomerRepositoryTest {
         assertThat(cust).isPresent();
         assertThat(cust.get().getFirstName()).isEqualTo("MARY");
         assertThat(cust.get().getLastName()).isEqualTo("SMITH");
-        assertThat(cust.get().getStore()).isEqualTo(1);
+        assertThat(cust.get().getStore().getStoreId()).isEqualTo(1);
     }
 
     @Test
