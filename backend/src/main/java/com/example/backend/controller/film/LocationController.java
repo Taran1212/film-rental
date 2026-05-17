@@ -26,6 +26,6 @@ public class LocationController {
 
     @GetMapping("/cities")
     public List<CityProjection> getCities(@RequestParam Integer countryId) {
-        return cityRepository.findByCountryCountryIdOrderByCityAsc(countryId);
+        return cityRepository.findByCountry_CountryIdOrderByCityAsc(countryId);
     }
 }
