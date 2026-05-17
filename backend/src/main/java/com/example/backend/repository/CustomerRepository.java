@@ -1,7 +1,6 @@
 package com.example.backend.repository;
 
 import com.example.backend.entity.Customer;
-import com.example.backend.entity.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,6 +28,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
 
     Long countByStore_StoreId(Integer storeId);
-    Long countByStoreId(Integer storeId);
 
 }
