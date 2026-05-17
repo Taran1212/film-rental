@@ -12,4 +12,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
     Optional<Payment> findTopByOrderByPaymentIdDesc();
     Page<Payment> findByStaff_StoreId(Integer storeId, Pageable pageable);
+    java.util.List<Payment> findByStaff_StoreId(
+            Integer storeId
+    );
 }

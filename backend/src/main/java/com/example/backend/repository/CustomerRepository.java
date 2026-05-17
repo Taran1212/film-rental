@@ -29,4 +29,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
 
     Long countByStore_StoreId(Integer storeId);
+    Long countByStoreId(Integer storeId);
+
 }
