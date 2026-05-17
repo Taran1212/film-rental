@@ -62,7 +62,7 @@ class StaffControllerTest {
         r.setLastName("Doe");
         r.setUsername("alice_d");
         r.setEmail("alice@example.com");
-        r.setPassword("test1234");
+        r.setPassword("not-a-real-secret");
         r.setStoreId(1);
         r.setAddress("123 Main St");
         r.setDistrict("D1");
