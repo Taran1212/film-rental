@@ -55,14 +55,17 @@ class StaffControllerTest {
             public String getPhone() { return "+1 234"; }
         };
     }
-
+    // when testing this method set password
+    //eg-> r.setPassword("test1234")
     private StaffRegisterDto validRequest() {
         StaffRegisterDto r = new StaffRegisterDto();
         r.setFirstName("Alice");
         r.setLastName("Doe");
         r.setUsername("alice_d");
         r.setEmail("alice@example.com");
-        r.setPassword("not-a-real-secret");
+        //set your passward
+        r.setPassword();
+
         r.setStoreId(1);
         r.setAddress("123 Main St");
         r.setDistrict("D1");
