@@ -1,16 +1,22 @@
 package com.example.backend.repository;
 
+import com.example.backend.dto.projection.FilmProjection;
 import com.example.backend.entity.Film;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FilmRepository extends JpaRepository<Film, Integer> {
 
-    Page<Film> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
+    @EntityGraph(attributePaths = "language")
+    Page<FilmProjection> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+
+    @EntityGraph(attributePaths = "language")
+    Page<FilmProjection> findAllProjectedBy(Pageable pageable);
 
     Page<Film> findDistinctByFilmActors_Actor_FirstNameContainingIgnoreCaseOrFilmActors_Actor_LastNameContainingIgnoreCase(
             String firstName,
@@ -35,4 +41,9 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 
     Page<Film> findDistinctByInventories_Store_StoreIdAndTitleContainingIgnoreCase(
             Integer storeId, String title, Pageable pageable);
+
+    @EntityGraph(attributePaths = "language")
+    Page<FilmProjection> findDistinctByFilmActors_Actor_ActorId(Integer actorId, Pageable pageable);
+
+
 }

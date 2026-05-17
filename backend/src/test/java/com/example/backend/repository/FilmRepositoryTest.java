@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.dto.projection.FilmProjection;
 import com.example.backend.entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -170,19 +171,27 @@ class FilmRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should find films by title")
-    void testFindByTitleContainingIgnoreCase() {
+    @DisplayName("findAllProjectedBy — projection includes language via @EntityGraph (no lazy error)")
+    void projectionShouldExposeLanguageString() {
+        Page<FilmProjection> page = filmRepository.findAllProjectedBy(PageRequest.of(0, 3));
 
-        Page<Film> result =
-                filmRepository.findByTitleContainingIgnoreCase(
-                        "Inception",
-                        pageable
-                );
+        assertThat(page.getContent()).hasSize(3);
+        FilmProjection first = page.getContent().get(0);
+        assertThat(first.getFilmId()).isNotNull();
+        assertThat(first.getTitle()).isNotBlank();
+        assertThat(first.getLanguage()).isNotBlank();   // SpEL navigation must work after tx
+        assertThat(first.getRentalRate()).isNotNull();
+    }
 
-        assertThat(result.getContent()).hasSize(1);
+    @Test
+    @DisplayName("findByTitleContainingIgnoreCase — case-insensitive substring search")
+    void shouldSearchByTitle() {
+        Page<FilmProjection> page = filmRepository
+                .findByTitleContainingIgnoreCase("academy", PageRequest.of(0, 5));
 
-        assertThat(result.getContent().get(0).getTitle())
-                .isEqualTo("Test Inception");
+        assertThat(page.getContent()).isNotEmpty();
+        assertThat(page.getContent()).anySatisfy(f ->
+                assertThat(f.getTitle()).containsIgnoringCase("ACADEMY"));
     }
 
     @Test
@@ -278,5 +287,16 @@ class FilmRepositoryTest {
 
         assertThat(result.getContent().get(0).getTitle())
                 .isEqualTo("Test Inception");
+    }
+
+    @Test
+    @DisplayName("findDistinctByFilmActors_Actor_ActorId — drill-down used by /actors/{id}/movies")
+    void shouldReturnAllFilmsForActor() {
+        Page<FilmProjection> page = filmRepository
+                .findDistinctByFilmActors_Actor_ActorId(1, PageRequest.of(0, 50));
+
+        assertThat(page.getContent()).isNotEmpty();
+        assertThat(page.getTotalElements()).isPositive();
+        assertThat(page.getContent().get(0).getLanguage()).isNotBlank();
     }
 }

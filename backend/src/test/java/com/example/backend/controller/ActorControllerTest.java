@@ -148,4 +148,28 @@ class ActorControllerTest {
                 .andExpect(jsonPath("$.message").value(
                         org.hamcrest.Matchers.containsString("invalid value")));
     }
+
+
+    @Test
+    @DisplayName("GET /api/actors/{id}/movies — paginated films for actor")
+    void shouldReturnActorMovies() throws Exception {
+        when(actorService.getActorMovies(eq(1), any()))
+                .thenReturn(new PageImpl<>(List.of(film(1, "ACADEMY DINOSAUR")), PageRequest.of(0, 10), 19));
+
+        mockMvc.perform(get("/api/actors/1/movies?page=0&size=10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].title").value("ACADEMY DINOSAUR"))
+                .andExpect(jsonPath("$.content[0].language").value("English"));
+    }
+
+    @Test
+    @DisplayName("GET /api/actors/{id}/movies — unknown actor → 404")
+    void moviesShouldReturn404ForUnknownActor() throws Exception {
+        when(actorService.getActorMovies(eq(9999), any()))
+                .thenThrow(new ResourceNotFoundException("Actor not found"));
+
+        mockMvc.perform(get("/api/actors/9999/movies"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Actor not found"));
+    }
 }

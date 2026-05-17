@@ -2,6 +2,7 @@ package com.example.backend.service.film;
 
 
 import com.example.backend.dto.projection.ActorProjection;
+import com.example.backend.dto.projection.FilmProjection;
 import com.example.backend.exception.ResourceNotFoundException;
 import com.example.backend.repository.ActorRepository;
 import com.example.backend.repository.FilmRepository;
@@ -43,5 +44,12 @@ public class ActorService {
     public ActorProjection getActorById(Integer id) {
         return actorRepository.findProjectedByActorId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Actor not found"));
+    }
+
+    public Page<FilmProjection> getActorMovies(Integer actorId, Pageable pageable) {
+        if (actorRepository.findProjectedByActorId(actorId).isEmpty()) {
+            throw new ResourceNotFoundException("Actor not found");
+        }
+        return filmRepository.findDistinctByFilmActors_Actor_ActorId(actorId, pageable);
     }
 }
