@@ -37,4 +37,36 @@ public class FilmController {
             @RequestParam(defaultValue = "5") int size) {
         return filmService.searchMovies(title, PageRequest.of(page, size));
     }
+
+    @GetMapping("/actor")
+    public Page<FilmProjection> searchMoviesByActor(
+            @RequestParam String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return filmService.searchMoviesByActor(name, PageRequest.of(page, size));
+    }
+
+    @GetMapping("/category")
+    public Page<FilmProjection> getMoviesByCategory(
+            @RequestParam String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return filmService.getMoviesByCategory(name, PageRequest.of(page, size));
+    }
+
+    @GetMapping("/{id}/details")
+    public MovieDetailsDto getMovieDetails(@PathVariable Integer id) {
+        return filmService.getMovieDetails(id);
+    }
+
+    @GetMapping("/languages")
+    public List<LanguageProjection> getAllLanguages() {
+        return filmService.getAllLanguages();
+    }
+
+    @GetMapping("/categories")
+    public List<CategoryProjection> getAllCategories() {
+        return filmService.getAllCategories();
+    }
+
 }
