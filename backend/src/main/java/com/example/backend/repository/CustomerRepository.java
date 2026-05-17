@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.dto.projection.CustomerProjection;
 import com.example.backend.entity.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +21,23 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
             Pageable pageable
     );
 
+    Page<CustomerProjection>
+    findProjectedByStore_StoreIdAndFirstNameContainingIgnoreCaseOrStore_StoreIdAndLastNameContainingIgnoreCase(
+            Integer storeId1, String firstName,
+            Integer storeId2, String lastName,
+            Pageable pageable);
 
-    Optional<Customer> findTopByOrderByCustomerIdDesc();
+    Page<CustomerProjection>
+    findProjectedByStore_StoreIdAndFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(
+            Integer storeId, String firstName, String lastName,
+            Pageable pageable);
+
+    Page<CustomerProjection> findProjectedByStore_StoreId(Integer storeId, Pageable pageable);
+
+
+    Customer findTopByOrderByCustomerIdDesc();
+
+    Optional<CustomerProjection> findProjectedByCustomerId(Integer customerId);
 
 
     Page<Customer> findByStore_StoreId(Integer storeId, Pageable pageable);
