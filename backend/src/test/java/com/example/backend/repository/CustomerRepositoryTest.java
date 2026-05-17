@@ -93,7 +93,7 @@ class CustomerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<Customer> customers =
-                customerRepository.findByStore_storeId(store1, pageable);
+                customerRepository.findByStore_StoreId(store1.getStoreId(), pageable);
 
         assertThat(customers.getTotalElements()).isGreaterThan(0);
     }
@@ -102,7 +102,7 @@ class CustomerRepositoryTest {
     @DisplayName("Test countByStore")
     void testCountByStore() {
 
-        Long count = customerRepository.countByStore_storeId(store1);
+        Long count = customerRepository.countByStore_StoreId(store1.getStoreId());
 
         assertThat(count).isGreaterThan(0);
     }
@@ -114,8 +114,8 @@ class CustomerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<Customer> customers =
-                customerRepository.findByStore_storeIdAndFirstNameContainingIgnoreCase(
-                        store1,
+                customerRepository.findByStore_StoreIdAndFirstNameContainingIgnoreCase(
+                        store1.getStoreId(),
                         "john",
                         pageable
                 );
@@ -134,8 +134,8 @@ class CustomerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<Customer> customers =
-                customerRepository.findByStore_storeIdAndLastNameContainingIgnoreCase(
-                        store1,
+                customerRepository.findByStore_StoreIdAndLastNameContainingIgnoreCase(
+                        store1.getStoreId(),
                         "smith",
                         pageable
                 );
@@ -164,7 +164,7 @@ class CustomerRepositoryTest {
         store99.setStoreId(99);
 
         Page<Customer> customers =
-                customerRepository.findByStore_storeId(store99, pageable);
+                customerRepository.findByStore_StoreId(store99.getStoreId(), pageable);
 
         assertThat(customers.getTotalElements()).isZero();
     }
@@ -176,7 +176,7 @@ class CustomerRepositoryTest {
         Store store99 = new Store();
         store99.setStoreId(99);
 
-        Long count = customerRepository.countByStore_storeId(store99);
+        Long count = customerRepository.countByStore_StoreId(store99.getStoreId());
 
         assertThat(count).isZero();
     }
