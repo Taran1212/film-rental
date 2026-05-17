@@ -86,8 +86,8 @@ public class LocationControllerTest {
     @DisplayName("GET /api/locations/cities — missing countryId → 400")
     void shouldRejectMissingCountryId() throws Exception {
         mockMvc.perform(get("/api/locations/cities"))
-                .andExpect(status().isBadRequest());
-//                .andExpect(jsonPath("$.message").value(
-//                        org.hamcrest.Matchers.containsString("countryId")));
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(
+                        org.hamcrest.Matchers.containsString("countryId")));
     }
 }
