@@ -2,11 +2,13 @@ package com.example.backend.service.payment;
 
 import com.example.backend.entity.*;
 import com.example.backend.repository.PaymentRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Service
 public class PaymentService {
     private final PaymentRepository paymentRepository;
     public PaymentService(PaymentRepository paymentRepository) {
