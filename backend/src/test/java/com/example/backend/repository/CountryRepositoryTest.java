@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.dto.projection.CountryProjection;
 import com.example.backend.entity.Country;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,8 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,13 +40,17 @@ public class CountryRepositoryTest {
     }
 
     @Test
-    void testFindAllCountriesTotalElements() {
-        Page<Country> countries = countryRepo.findAll(PageRequest.of(0, 10));
+    void testFindAllByOrderByCountryAsc() {
+
+        List<CountryProjection> countries =
+                countryRepo.findAllByOrderByCountryAsc();
 
         assertNotNull(countries);
+        assertFalse(countries.isEmpty());
 
-        assertTrue(
-                countries.getTotalElements() >= countries.getContent().size()
-        );
+        countries.forEach(country -> {
+            assertNotNull(country.getCountryId());
+            assertNotNull(country.getName());
+        });
     }
 }
