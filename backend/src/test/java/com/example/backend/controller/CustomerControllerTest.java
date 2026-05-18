@@ -17,6 +17,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -164,5 +165,84 @@ class CustomerControllerTest {
                         .content(json.writeValueAsString(r)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.fieldErrors.storeId").exists());
+    }
+
+    @Test
+    @DisplayName("GET /api/customers — page and size params are forwarded")
+    void shouldForwardPaginationParams() throws Exception {
+        when(customerService.getAllCustomers(PageRequest.of(2, 10)))
+                .thenReturn(new PageImpl<>(List.of(customer(1, "MARY SMITH", "mary@x.com"))));
+
+        mockMvc.perform(get("/api/customers?page=2&size=10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].customerId").value(1));
+    }
+
+    @Test
+    @DisplayName("GET /api/customers/search — missing name param → 400")
+    void shouldReturn400WhenSearchNameMissing() throws Exception {
+        mockMvc.perform(get("/api/customers/search"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("GET /api/customers/search — empty result returns empty page")
+    void shouldReturnEmptyPageWhenNoSearchResults() throws Exception {
+        when(customerService.searchCustomers(eq("zzz"), any()))
+                .thenReturn(new PageImpl<>(List.of()));
+
+        mockMvc.perform(get("/api/customers/search?name=zzz"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isEmpty());
+    }
+
+    @Test
+    @DisplayName("POST /api/customers — invalid phone → 400")
+    void shouldRejectBadPhone() throws Exception {
+        CustomerRequestDto r = validRequest();
+        r.setPhone(null);
+
+        mockMvc.perform(post("/api/customers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json.writeValueAsString(r)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fieldErrors.phone").exists());
+    }
+
+    @Test
+    @DisplayName("POST /api/customers — missing firstName → 400")
+    void shouldRejectMissingFirstName() throws Exception {
+        CustomerRequestDto r = validRequest();
+        r.setFirstName(null);
+
+        mockMvc.perform(post("/api/customers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json.writeValueAsString(r)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fieldErrors.firstName").exists());
+    }
+
+    @Test
+    @DisplayName("POST /api/customers — missing lastName → 400")
+    void shouldRejectMissingLastName() throws Exception {
+        CustomerRequestDto r = validRequest();
+        r.setLastName(null);
+
+        mockMvc.perform(post("/api/customers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json.writeValueAsString(r)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fieldErrors.lastName").exists());
+    }
+
+    @Test
+    @DisplayName("GET /api/customers — default pagination returns page 0 size 5")
+    void shouldUseDefaultPagination() throws Exception {
+        when(customerService.getAllCustomers(PageRequest.of(0, 5)))
+                .thenReturn(new PageImpl<>(List.of(customer(1, "MARY SMITH", "mary@x.com"))));
+
+        mockMvc.perform(get("/api/customers"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].customerId").value(1));
     }
 }
