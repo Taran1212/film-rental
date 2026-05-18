@@ -1,0 +1,11 @@
+services:
+  backend:
+    image: navamsharma142/backend:latest
+    container_name: film-rental-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
