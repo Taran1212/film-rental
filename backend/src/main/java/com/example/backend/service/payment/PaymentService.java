@@ -16,11 +16,9 @@ public class PaymentService {
     }
     @Transactional
     public Payment createPaymentForRental(Rental rental, Customer customer, Staff staff, Inventory inventory) {
-        Payment latestPayment = paymentRepository.findTopByOrderByPaymentIdDesc().orElse(null);
-        int nextPaymentId = latestPayment == null ? 1 : latestPayment.getPaymentId() + 1;
+
 
         Payment payment = new Payment();
-        payment.setPaymentId(nextPaymentId);
         payment.setCustomer(customer);
         payment.setStaff(staff);
         payment.setRental(rental);

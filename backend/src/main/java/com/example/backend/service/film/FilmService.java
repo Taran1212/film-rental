@@ -31,6 +31,7 @@ public class FilmService {
     private final CategoryRepository categoryRepository;
     private final ActorRepository actorRepository;
     private final AuthUtil authUtil;
+    private final StoreRepository storeRepository;
 
 
     public Page<FilmProjection> getAllMovies(Pageable pageable) {
@@ -112,5 +113,87 @@ public class FilmService {
         fa.setFilm(film);
         fa.setLastUpdate(LocalDateTime.now());
         filmActorRepository.save(fa);
+    }
+
+    @Transactional
+    public Integer createMovie(MovieCreateRequestDto request) {
+        String username = authUtil.getLoggedInUsername();
+        Staff staff = staffRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Staff not found"));
+
+        Language language = languageRepository.findById(request.getLanguageId())
+                .orElseThrow(() -> new ResourceNotFoundException("Language not found"));
+
+        Film film = new Film();
+        film.setTitle(request.getTitle());
+        film.setDescription(request.getDescription());
+        film.setReleaseYear(Integer.valueOf(request.getReleaseYear()));
+        film.setLanguage(language);
+        film.setRentalDuration(request.getRentalDuration() != null ? request.getRentalDuration() : 3);
+        film.setRentalRate(request.getRentalRate());
+        film.setLength(request.getLength());
+        film.setReplacementCost(request.getReplacementCost());
+        film.setRating(request.getRating());
+        film.setSpecialFeatures(request.getSpecialFeatures());
+        film.setLastUpdate(LocalDateTime.now());
+        Film saved = filmRepository.save(film);
+
+        // Link existing actors selected from the search dropdown.
+        if (request.getActorIds() != null) {
+            for (Integer actorId : request.getActorIds()) {
+                Actor actor = actorRepository.findById(actorId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Actor not found: " + actorId));
+                linkActorToFilm(actor, saved);
+            }
+        }
+
+        // Create + link brand-new actors entered inline in the form.
+        if (request.getNewActors() != null && !request.getNewActors().isEmpty()) {
+            // Pre-compute next actor id once; we increment locally as we save more.
+            int nextActorId = actorRepository.findTopByOrderByActorIdDesc()
+                    .map(a -> a.getActorId() + 1)
+                    .orElse(1);
+
+            for (NewActorDto na : request.getNewActors()) {
+                Actor newActor = new Actor();
+                newActor.setActorId(nextActorId++);
+                newActor.setFirstName(na.getFirstName().trim());
+                newActor.setLastName(na.getLastName().trim());
+                newActor.setLastUpdate(LocalDateTime.now());
+                Actor savedActor = actorRepository.save(newActor);
+
+                linkActorToFilm(savedActor, saved);
+            }
+        }
+
+        if (request.getCategoryIds() != null) {
+            for (Integer categoryId : request.getCategoryIds()) {
+                Category category = categoryRepository.findById(categoryId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Category not found: " + categoryId));
+                FilmCategoryId id = new FilmCategoryId();
+                id.setFilmId(saved.getFilmId());
+                id.setCategoryId(categoryId);
+                FilmCategory fc = new FilmCategory();
+                fc.setId(id);
+                fc.setFilm(saved);
+                fc.setCategory(category);
+                fc.setLastUpdate(LocalDateTime.now());
+                filmCategoryRepository.save(fc);
+            }
+        }
+        Integer storeId = staff.getStoreId();
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Store not found: " + storeId));
+
+        int copies = (request.getCopies() != null && request.getCopies() > 0) ? request.getCopies() : 1;
+        for (int i = 0; i < copies; i++) {
+            Inventory inv = new Inventory();
+            inv.setFilm(saved);
+            inv.setStore(store);
+            inv.setLastUpdate(LocalDateTime.now());
+            inventoryRepository.save(inv);
+        }
+
+        return saved.getFilmId();
     }
 }
