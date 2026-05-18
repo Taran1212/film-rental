@@ -56,11 +56,8 @@ public class CustomerService {
                 .setParameter(8, LocalDateTime.now())
                 .executeUpdate();
 
-        Customer latestCustomer = customerRepository.findTopByOrderByCustomerIdDesc();
-        int nextId = latestCustomer == null ? 1 : latestCustomer.getCustomerId() + 1;
 
         Customer customer = new Customer();
-        customer.setCustomerId(nextId);
         customer.setFirstName(dto.getFirstName());
         customer.setLastName(dto.getLastName());
         customer.setEmail(dto.getEmail());
@@ -76,7 +73,7 @@ public class CustomerService {
 
         customerRepository.save(customer);
 
-        return String.valueOf(nextId);
+        return String.valueOf(customer.getCustomerId());
     }
 
     public Page<CustomerProjection> getAllCustomers(Pageable pageable) {
