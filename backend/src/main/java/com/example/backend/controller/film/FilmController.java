@@ -69,4 +69,11 @@ public class FilmController {
         return filmService.getAllCategories();
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public java.util.Map<String, Integer> createMovie(@Valid @RequestBody MovieCreateRequestDto request) {
+        Integer id = filmService.createMovie(request);
+        return java.util.Map.of("filmId", id);
+    }
+
 }
