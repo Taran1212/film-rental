@@ -48,14 +48,9 @@ public class RentalService {
         Staff staff = staffRepository.findById(dto.getStaffId())
                 .orElseThrow(() -> new ResourceNotFoundException("Staff not found"));
 
-        Rental latestRental = rentalRepository.findTopByOrderByRentalIdDesc();
 
-        int nextRentalId = latestRental == null
-                ? 1
-                : latestRental.getRentalId() + 1;
 
         Rental rental = new Rental();
-        rental.setRentalId(nextRentalId);
         rental.setRentalDate(LocalDateTime.now());
         rental.setInventory(inventory);
         rental.setCustomer(customer);
