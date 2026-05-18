@@ -192,4 +192,100 @@ class FilmControllerTest {
                 .andExpect(jsonPath("$.fieldErrors.rentalRate").exists());
     }
 
+    @Test
+    @DisplayName("GET /api/movies — returns empty page when no films exist")
+    void shouldReturnEmptyMoviePage() throws Exception {
+        when(filmService.getAllMovies(any()))
+                .thenReturn(new PageImpl<>(List.of()));
+
+        mockMvc.perform(get("/api/movies"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isEmpty());
+    }
+
+    @Test
+    @DisplayName("GET /api/movies/search — missing title param → 400")
+    void shouldReturn400WhenSearchTitleMissing() throws Exception {
+        mockMvc.perform(get("/api/movies/search"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("GET /api/movies/actor — missing name param → 400")
+    void shouldReturn400WhenActorNameMissing() throws Exception {
+        mockMvc.perform(get("/api/movies/actor"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("GET /api/movies/category — missing name param → 400")
+    void shouldReturn400WhenCategoryNameMissing() throws Exception {
+        mockMvc.perform(get("/api/movies/category"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("GET /api/movies/{id}/details — unknown id → 404")
+    void shouldReturn404ForUnknownFilm() throws Exception {
+        when(filmService.getMovieDetails(9999))
+                .thenThrow(new com.example.backend.exception.ResourceNotFoundException("Movie not found"));
+
+        mockMvc.perform(get("/api/movies/9999/details"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Movie not found"));
+    }
+
+    @Test
+    @DisplayName("GET /api/movies/{id}/details — non-numeric id → 400")
+    void shouldReturn400ForNonNumericFilmId() throws Exception {
+        mockMvc.perform(get("/api/movies/abc/details"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(
+                        org.hamcrest.Matchers.containsString("invalid value")));
+    }
+
+    @Test
+    @DisplayName("GET /api/movies/languages — returns empty list")
+    void shouldReturnEmptyLanguageList() throws Exception {
+        when(filmService.getAllLanguages()).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/movies/languages"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    @DisplayName("GET /api/movies/categories — returns empty list")
+    void shouldReturnEmptyCategoryList() throws Exception {
+        when(filmService.getAllCategories()).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/movies/categories"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    @DisplayName("POST /api/movies — valid body → 201 with filmId")
+    void shouldCreateMovieSuccessfully() throws Exception {
+        when(filmService.createMovie(any())).thenReturn(42);
+
+        String body = """
+            {
+              "title": "New Film",
+              "languageId": 1,
+              "rentalRate": 2.99,
+              "replacementCost": 19.99,
+              "releaseYear": "2025",
+              "length": 100,
+              "rating": "G"
+            }
+            """;
+
+        mockMvc.perform(post("/api/movies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.filmId").value(42));
+    }
+
 }

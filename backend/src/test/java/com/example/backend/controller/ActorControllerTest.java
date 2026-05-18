@@ -172,4 +172,55 @@ class ActorControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Actor not found"));
     }
+
+    @Test
+    @DisplayName("GET /api/actors — returns empty page when no actors exist")
+    void shouldReturnEmptyActorPage() throws Exception {
+        when(actorService.getAllActors(any()))
+                .thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 10), 0));
+
+        mockMvc.perform(get("/api/actors"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isEmpty())
+                .andExpect(jsonPath("$.totalElements").value(0));
+    }
+
+    @Test
+    @DisplayName("GET /api/actors/basic — returns empty array when no actors")
+    void shouldReturnEmptyBasicList() throws Exception {
+        when(actorService.getAllActorsBasic()).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/actors/basic"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    @DisplayName("GET /api/actors/search — missing name param → 400")
+    void shouldReturn400WhenSearchNameMissing() throws Exception {
+        mockMvc.perform(get("/api/actors/search"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("GET /api/actors/{id}/movies — non-numeric id → 400 type mismatch")
+    void shouldReturn400ForBadActorIdInMovies() throws Exception {
+        mockMvc.perform(get("/api/actors/abc/movies"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(
+                        org.hamcrest.Matchers.containsString("invalid value")));
+    }
+
+    @Test
+    @DisplayName("GET /api/actors/{id}/movies — returns empty page when actor has no films")
+    void shouldReturnEmptyMoviesPage() throws Exception {
+        when(actorService.getActorMovies(eq(1), any()))
+                .thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 10), 0));
+
+        mockMvc.perform(get("/api/actors/1/movies"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isEmpty())
+                .andExpect(jsonPath("$.totalElements").value(0));
+    }
 }
